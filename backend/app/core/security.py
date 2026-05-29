@@ -1,15 +1,17 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+
 from app.core.logger import logger
+from app.core.config import settings
 
 # hash password
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # key for sign token
-SECRET_KEY = "you-secret-key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 def hash_password(password: str) -> str:
     logger.info("Hashing Password")
