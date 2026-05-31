@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException, Depends, status
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -37,7 +36,7 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
     # Check duplicate citizen_id
     existing_citizen_id = db.query(User).filter(User.citizen_id == request.citizen_id).first()
     if existing_citizen_id:
-        logger.warning(f"Register failed: citizen_id already exists citizen_id={request.citizen_id}")
+        logger.warning(f"Register failed: citizen_id already exists")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Citizen ID already exists"
@@ -80,14 +79,14 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 # Login endpoint
 @router.post("/login", response_model=TokenResponse)
 def login(request: LoginRequest, db: Session = Depends(get_db)):
-    logger.info(f"Login attempt: username={request.username}")
+    logger.info(f"Login attempt by citizen_id")
 
-    # Find user by username
-    user = db.query(User).filter(User.username == request.username).first()
+    # Find user by citizen_id
+    user = db.query(User).filter(User.citizen_id == request.citizen_id).first()
 
-    # Do not reveal whether username or password is wrong
+    # Do not reveal whether citizen_id or password is wrong
     if not user:
-        logger.warning(f"Login failed: user not found username={request.username}")
+        logger.warning(f"Login failed: citizen_id not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -104,7 +103,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     # Create JWT token payload
     token = create_access_token({
         "user_id": user.id,
-        "username": user.username,
+        "citizen_id": user.citizen_id,
         "role": user.role
     })
 

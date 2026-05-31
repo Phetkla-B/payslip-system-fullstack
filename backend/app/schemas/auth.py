@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 
 class RegisterRequest(BaseModel):
-    username: str
+    employee_code: str
+    first_name: str
+    last_name: str
     email: str
     citizen_id: str
     password: str
 
 class LoginRequest(BaseModel):
-    username: str
+    citizen_id: str
     password: str
 
 class TokenResponse(BaseModel):

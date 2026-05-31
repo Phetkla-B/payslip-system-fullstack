@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.routes import auth, users
-from app.models import user
+from app.models import user, payslip, upload_history
 from app.core.database import engine, Base
 from app.core.logger import logger
 
@@ -12,7 +12,10 @@ app = FastAPI()
 logger.info("Starting Payslip API")
 
 # Create database tables
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def startup():
+    logger.info("Creating database tables")
+    Base.metadata.create_all(bind=engine)
 
 # Log database initialization
 logger.info("Database tables initialized")
