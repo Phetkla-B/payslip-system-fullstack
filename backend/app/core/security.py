@@ -1,13 +1,11 @@
 from datetime import datetime, timedelta
-from jose import JWTError, jwt
+from jose import jwt
 from passlib.context import CryptContext
 
 from app.core.logger import logger
 from app.core.config import settings
-from app.core.database import SessionLocal, get_db
-from app.models.user import User
 
-# hash password
+# Password hashing configuration
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # JWT settings Key
@@ -22,6 +20,7 @@ def hash_password(password: str) -> str:
 
 # Verify password
 def verify_password(plain_password: str, hash_password: str) -> bool:
+    # Compare plain password from user with hashed password from database
     result = pwd_context.verify(plain_password, hash_password)
 
     if result:
@@ -32,15 +31,22 @@ def verify_password(plain_password: str, hash_password: str) -> bool:
     return result 
 
 # Create JWT token
-def create_access_token(data: dict):
-    logger.info(f"Creating access token for data : {data}")
-
+def create_access_token(data: dict) -> str:
+    # Copy data to avoid modifying the original payload
     to_encode = data.copy()
 
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # Set token expiration time
+    expire = datetime.utcnow() + timedelta(
+        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     to_encode.update({"exp": expire})
 
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    # Create JWT token
+    encoded_jwt = jwt.encode(
+        to_encode, 
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM
+    )
 
     logger.info("Access token created successfully")
 
