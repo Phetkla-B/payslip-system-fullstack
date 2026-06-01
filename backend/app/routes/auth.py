@@ -13,16 +13,7 @@ router = APIRouter()
 # Register endpoint
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register(request: RegisterRequest, db: Session = Depends(get_db)):
-    logger.info(f"Register attempt: username={request.username}")
-
-    # Check duplicate username
-    existing_username = db.query(User).filter(User.username == request.username).first()
-    if existing_username:
-        logger.warning(f"Register failed: username already exists username={request.username}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already exists"
-        )
+    logger.info(f"Register attempt: employee_code={request.employee_code}")
     
     # Check duplicate email
     existing_email = db.query(User).filter(User.email == request.email).first()
@@ -47,11 +38,13 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 
     # Create user
     new_user = User(
-        username=request.username,
-        email=request.email,
+        employee_code=request.employee_code,
         citizen_id=request.citizen_id,
+        first_name=request.first_name,
+        last_name=request.last_name,
+        email=request.email,
         hashed_password=hash_pw,
-        role="user"
+        role="employee"
     )
 
     try:

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class RegisterRequest(BaseModel):
     employee_code: str
     first_name: str
