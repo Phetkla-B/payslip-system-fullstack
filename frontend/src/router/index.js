@@ -38,3 +38,34 @@ const router = createRouter({
 });
 
 export default router;
+
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem("access_token");
+    const role = localStorage.getItem("user_role");
+
+    // Public page
+    if (to.path === "/login") {
+        next();
+        return;
+    }
+
+    // No token, redirect to login
+    if (!token) {
+        next("/login");
+        return;
+    }
+
+    // Employee cannot access admin page
+    if (to.path.startsWith("/admin") && role !== "admin") {
+        next("/payslips");
+        return;
+    }
+
+    // Admin should not access employee payslip pages
+    if (to.path.startsWith("/payslips") && role === "admin") {
+        next("/admin/upload");
+        return;
+    }
+
+    next();
+});

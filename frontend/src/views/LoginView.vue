@@ -25,6 +25,10 @@ async function handleLogin() {
             password: password.value,
         });
 
+        // Reset login
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_role");
+
         // Save token to localStorage
         localStorage.setItem("access_token", response.data.access_token);
 
@@ -32,11 +36,14 @@ async function handleLogin() {
         const meResponse = await api.get("/users/me");
         const role = meResponse.data.role;
 
+        // Save user role for navigation menu
+        localStorage.setItem("user_role", role);
+
         // Redirect by role
         if (role === "admin") {
-            router.push("/admin/upload");
+            window.location.href = "/admin/upload";
         } else {
-            router.push("/payslips");
+            window.location.href = ("/payslips");
         }
     } catch (error) {
         console.error("Login failed:", error);
