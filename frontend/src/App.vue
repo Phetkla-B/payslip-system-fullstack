@@ -9,11 +9,13 @@ const router = useRouter();
 const isLoginPage = computed(() => route.path === "/login");
 
 // Read user role from localStorage
+const userName = computed(() => localStorage.getItem("user_name"));
 const userRole = computed(() => localStorage.getItem("user_role"));
 
 // Logout user
 function logout() {
   localStorage.removeItem("access_token");
+  localStorage.removeItem("user_name");
   localStorage.removeItem("user_role");
 
   router.push("/login");
@@ -41,9 +43,16 @@ function logout() {
         
       </div>
 
-      <button @click="logout">
+      <div class="nav-right">
+        <span class="user-info">
+          {{ userName }} ({{ userRole }})
+        </span>
+
+        <button @click="logout">
         Logout
-      </button>
+        </button>
+
+      </div>
     </nav>
 
     <router-view />
@@ -67,13 +76,34 @@ function logout() {
   gap: 20px;
 }
 
+.nav-right {
+  display: flex;
+  align-item: center;
+  gap: 16px;
+}
+
+.user-info {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.navbar a {
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.navbar a:hover {
+  background: #374151;
+}
+
 a {
   color: white;
   text-decoration: none;
 }
 
 a.router-link-active {
-  text-decoration: underline;
+  background: #2563eb;
+  text-decoration: none;
 }
 
 button {

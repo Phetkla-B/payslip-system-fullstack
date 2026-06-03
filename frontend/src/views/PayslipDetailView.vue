@@ -29,6 +29,44 @@ function goBack() {
     router.push("/payslips");
 }
 
+// Download PDF
+async function downloadPdf() {
+    try {
+        const response = await api.get(
+            `/payslips/${route.params.id}/download`,
+            {
+                responseType: "blob",
+            }
+        );
+
+        const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        const fileLink = document.createElement("a");
+
+        fileLink.href = fileURL;
+        fileLink.setAttribute(
+            "download",
+            `payslip_${route.params.id}.pdf`
+        );
+
+        document.body.appendChild(fileLink);
+        fileLink.click();
+        fileLink.remove();
+
+        window.URL.revokeObjectURL(fileURL);
+    } catch (error) {
+        console.error("Download PDF failed:", error);
+
+        if (error.response?.status === 404) {
+            errorMessage.value = "ไม่พบข้อมูลเงินเดือน หรือคุณไม่มีสิทธิ์ดูข้อมูล";
+        } else if (!error.response) {
+            errorMessage.value = "ไม่สามารถเชื่อมต่อ Server ได้";
+        } else {
+            errorMessage.value = "ไม่สามารถโหลดรายละเอียดเงินเดือนได้";
+        }
+        
+    }
+}
+
 onMounted(() => {
     loadPayslipDetail();
 });
@@ -38,6 +76,8 @@ onMounted(() => {
 <template>
     <div class="container">
         <button @click="goBack">Back</button>
+
+        <button @click="downloadPdf">Download PDF</button>
 
         <h1>Payslip Detail</h1>
 
@@ -99,6 +139,7 @@ onMounted(() => {
 }
 
 button {
+    margin-right: 8px;
     margin-bottom: 16px;
     padding: 8px 12px;
 }

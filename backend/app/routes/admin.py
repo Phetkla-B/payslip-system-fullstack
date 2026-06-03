@@ -10,7 +10,7 @@ from app.core.logger import logger
 from app.models.user import User
 from app.models.upload_history import UploadHistory
 from app.models.payslip import Payslip
-from app.schemas.upload_history import UploadHistoryResponse
+from app.schemas.upload_history import UploadHistoryResponse, UploadHistoryDetailResponse
 
 router = APIRouter()
 
@@ -247,3 +247,38 @@ def get_upload_history(
     )
 
     return histories
+
+# Upload History detail
+@router.get("/upload-history/{upload_history_id}", response_model=UploadHistoryDetailResponse)
+def get_upload_history_detail(
+    upload_history_id: int,
+    current_admin: User = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    # Log upload history detail request
+    logger.info(
+        f"Get upload history detail request: admin_id={current_admin.id}, "
+        f"upload_history_id={upload_history_id}"
+    )
+
+    # Query upload history by id
+    upload_history = db.query(UploadHistory).filter(
+        UploadHistory.id == upload_history_id
+    ).first()
+
+    if upload_history is None:
+        logger.warning(
+            f"Upload history not found: admin_id={current_admin.id}, "
+            f"upload_history_id={upload_history_id}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Upload history not found"
+        )
+    
+    logger.info(
+        f"Get upload history detail success: admin_id={current_admin.id}, "
+        f"upload_history_id{upload_history.id}"
+    )
+
+    return upload_history

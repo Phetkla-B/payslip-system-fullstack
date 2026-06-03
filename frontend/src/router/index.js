@@ -5,6 +5,7 @@ import UploadHistoryView from "../views/UploadHistoryView.vue";
 import PayslipListView from "../views/PayslipListView.vue";
 import PayslipDetailView from "../views/PayslipDetailView.vue";
 
+
 const routes = [
     {
         path: "/",

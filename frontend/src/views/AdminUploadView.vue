@@ -21,6 +21,24 @@ async function uploadPayslip() {
     errorMessage.value = "";
     uploadResult.value = null;
 
+    // Validate month
+    if (!salaryMonth.value) {
+        errorMessage.value = "กรุณากรอกเดือนที่ต้องการ"
+        return;
+    }
+
+    // Validate year
+    if (!salaryYear.value) {
+        errorMessage.value = "กรุณากรอกปีที่ต้องการ"
+        return;
+    }
+
+    // Validate file
+    if (!selectedFile.value) {
+        errorMessage.value = "กรุณาเลือกไฟล์ Excel"
+        return;
+    }
+
     try {
         const formData = new FormData();
 
@@ -43,9 +61,13 @@ async function uploadPayslip() {
     } catch (error) {
         console.error(error);
 
-        errorMessage.value =
-            error.response?.data?.detail ||
-            "Upload failed";
+        if (error.response?.status === 400) {
+            errorMessage.value = error.response.data.detail || "ไฟล์ไม่ถูกต้อง";
+        } else if (error.response?.status === 403) {
+            errorMessage.value = "คุณไม่มีสิทธิ์ Upload ไฟล์";
+        } else {
+            errorMessage.value = "Upload ไม่สำเร็จ กรุณาลองใหม่";
+        }
     }
 }
 </script>
@@ -77,7 +99,7 @@ async function uploadPayslip() {
 
         </div>
 
-        <dev class="form-group">
+        <div class="form-group">
             <label>Excel File</label>
 
             <input
@@ -86,7 +108,7 @@ async function uploadPayslip() {
                 @change="handleFileChange"
             />
 
-        </dev>
+        </div>
 
         <button @click="uploadPayslip">
             Upload

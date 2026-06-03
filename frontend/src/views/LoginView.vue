@@ -25,8 +25,9 @@ async function handleLogin() {
             password: password.value,
         });
 
-        // Reset login
+        // Reset before login
         localStorage.removeItem("access_token");
+        localStorage.removeItem("user_name");
         localStorage.removeItem("user_role");
 
         // Save token to localStorage
@@ -38,6 +39,7 @@ async function handleLogin() {
 
         // Save user role for navigation menu
         localStorage.setItem("user_role", role);
+        localStorage.setItem("user_name", `${meResponse.data.first_name} ${meResponse.data.last_name}`);
 
         // Redirect by role
         if (role === "admin") {
@@ -47,7 +49,15 @@ async function handleLogin() {
         }
     } catch (error) {
         console.error("Login failed:", error);
-        errorMessage.value = "เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง";
+
+        if (error.response?.status === 401){
+            errorMessage.value = "เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง";
+        } else if (!error.response) {
+            errorMessage.value = "ไม่สามารถเชื่อมต่อ Server ได้";
+        } else {
+            errorMessage.value = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
+        }
+        
     } finally {
         isLoading.value = false;
     }
