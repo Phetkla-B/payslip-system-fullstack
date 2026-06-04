@@ -111,6 +111,9 @@ npm install
 npm run dev
 ```
 
+## Sample-data
+- In folder sample-data > Test_Payslip.xlsx
+
 ## Screenshots
 
 ### Login Page
