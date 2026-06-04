@@ -99,14 +99,17 @@ cd backend
 pip install -r requirements.txt
 
 uvicorn app.main:app --reload
+```
 
 ## Run Frontend
 
+```bash
 cd frontend
 
 npm install
 
 npm run dev
+```
 
 ## Database ER Diagram
 
@@ -144,3 +147,4 @@ erDiagram
         int salary_year
         string status
     }
+```
