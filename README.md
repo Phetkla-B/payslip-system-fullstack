@@ -44,19 +44,7 @@ Employee can securely view and download their payslips while administrators can 
 
 ## Architecture
 
-Frontend (Vue 3)
-
-        |
-
-        v
-
-Backend (FastAPI)
-
-        |
-
-        v
-        
-MySQL Database
+Frontend (Vue 3) -> Backend (FastAPI) -> MySQL Database
 
 ## Database Design
 
@@ -105,6 +93,7 @@ The system will reject file with missing required columns.
 
 ## Run Backend
 
+```bash
 cd backend
 
 pip install -r requirements.txt
@@ -118,3 +107,40 @@ cd frontend
 npm install
 
 npm run dev
+
+## Database ER Diagram
+
+```mermaid
+erDiagram
+
+    USERS ||--o{ PAYSLIPS : owns
+    UPLOAD_HISTORIES ||--o{ PAYSLIPS : creates
+
+    USERS {
+        int id PK
+        string citizen_id
+        string full_name
+        string role
+    }
+
+    PAYSLIPS {
+        int id PK
+        int user_id FK
+        int upload_history_id FK
+        string employee_code
+        string citizen_id
+        int salary_month
+        int salary_year
+        decimal total_income
+        decimal total_deduction
+        decimal net_salary
+    }
+
+    UPLOAD_HISTORIES {
+        int id PK
+        string file_name
+        int uploaded_by_user_id
+        int salary_month
+        int salary_year
+        string status
+    }
