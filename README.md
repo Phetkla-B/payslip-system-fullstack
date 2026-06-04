@@ -111,6 +111,26 @@ npm install
 npm run dev
 ```
 
+## Screenshots
+
+### Login Page
+
+![Login](docs/login-page.png)
+
+### Upload Payslip
+
+![Upload](docs/upload-page.png)
+
+### Upload History
+
+![History](docs/upload-history-page.png)
+
+### My Payslip
+![Payslip](docs/mypayslip-page.png)
+
+### Payslip Detail
+![Detail](docs/payslip-detail-page.png)
+
 ## Database ER Diagram
 
 ```mermaid
