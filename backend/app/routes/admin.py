@@ -82,19 +82,55 @@ def upload_payslip(
         # Read Excel file from uploaded
         df = pd.read_excel(excel_file)
 
-        # Count total records from Excel
-        total_records = int(df["ID Card"].notna().sum())
+        # Clean column name by removing leading/trailing spaces
+        df.columns = df.columns.str.strip()
 
-        logger.info(
-            f"Excel file read success: file_name={file.filename}, "
-            f"total_records={total_records}"
-        )
+        # Count total records from Excel
+        #total_records = int(df["ID Card"].notna().sum())
+
+        #logger.info(
+        #    f"Excel file read success: file_name={file.filename}, "
+        #    f"total_records={total_records}"
+        #)
 
     except Exception as e:
         logger.error(f"Excel file read failed: cannot read Excel file error={str(e)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot read Excel file"
+        )
+
+    # Required columns for import excel
+    required_columns = [
+        "เลขรหัส / ID",
+        "ชื่อ-สกุล / Name",
+        "ID Card",
+        "เงินเดือน / Salary",
+        "รายรับทั้งหมด / Total Income",
+        "รวมรายการหัก",
+        "รวมทั้งหมด / Total Payment"
+    ]
+
+    # Check missing columns
+    missing_columns = [
+        column
+        for column in required_columns
+        if column not in df.columns
+    ]
+
+    if missing_columns:
+        logger.warning(f"Upload failed: missing columns={missing_columns}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Missing required column: {', '.join(missing_columns)}"
+        )
+    
+    # Count total records from Excel
+    total_records = int(df["ID Card"].notna().sum())
+
+    logger.info(
+            f"Excel file read success: file_name={file.filename}, "
+            f"total_records={total_records}"
         )
 
     # Create upload history record
@@ -178,12 +214,17 @@ def upload_payslip(
                 special_amount=to_decimal(row.get("Special")),
 
                 expense_deduction=to_decimal(row.get("รายการหัก / Deduct")),
-                social_security=Decimal("0"),
-                provident_fund=Decimal("0"),
+                social_security=to_decimal(row.get("ประกันสังคมสะสม ประจำปี 2568")),
+                provident_fund=to_decimal(row.get("กองทุนสงเคราะห์ลูกจ้าง")),
                 tax=to_decimal(get_row_value(row, ["TAX", "Tax", "tax"])),
                 other_deduction=Decimal("0"),
 
-                total_income=to_decimal(row.get("รายรับทั้งหมด / Total Income")),
+                total_income=to_decimal(
+                    get_row_value(row, [
+                        "รายรับทั้งหมด / Total Income",
+                        "รายรับทั้งหมด / Total  Income"
+                    ])
+                ),
                 total_deduction=to_decimal(row.get("รวมรายการหัก")),
                 net_salary=to_decimal(row.get("รวมทั้งหมด / Total Payment"))
             )
