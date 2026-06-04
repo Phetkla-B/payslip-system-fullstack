@@ -121,9 +121,15 @@ erDiagram
 
     USERS {
         int id PK
+        string employee_code
         string citizen_id
-        string full_name
+        string first_name
+        string last_name
+        string email
+        string hashed_password
         string role
+        datetime create_at
+        datetime update_at
     }
 
     PAYSLIPS {
@@ -132,11 +138,28 @@ erDiagram
         int upload_history_id FK
         string employee_code
         string citizen_id
+        string department
+        string position
         int salary_month
         int salary_year
+        Decimal base_salary
+        Decimal paid_salary
+        Decimal allowance
+        Decimal overtime_pay
+        Decimal bonus
+        Decimal other_income
+        Decimal adjust_amount
+        Decimal special_amount
+        Decimal expense_deduction
+        Decimal social_security
+        Decimal provident_fund
+        Decimal tax
+        Decimal other_deduction
         decimal total_income
         decimal total_deduction
         decimal net_salary
+        datetime create_at
+        datetime update_at
     }
 
     UPLOAD_HISTORIES {
@@ -145,6 +168,10 @@ erDiagram
         int uploaded_by_user_id
         int salary_month
         int salary_year
+        int total_records
+        int success_records
+        int failed_records
         string status
+        datetime create_at
     }
 ```
