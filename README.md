@@ -45,11 +45,17 @@ Employee can securely view and download their payslips while administrators can 
 ## Architecture
 
 Frontend (Vue 3)
+
         |
+
         v
+
 Backend (FastAPI)
+
         |
+
         v
+        
 MySQL Database
 
 ## Database Design
@@ -64,24 +70,24 @@ Main Tables:
 
 ### Authentication
 
-POST /auth/register
-POST /auth/login
+- POST /auth/register
+- POST /auth/login
 
 ### User
 
-GET /users/me
+- GET /users/me
 
 ### Payslips
 
-GET /payslips
-GET /payslips/{id}
-GET /payslips/{id}/pdf
+- GET /payslips
+- GET /payslips/{id}
+- GET /payslips/{id}/pdf
 
 ### Admin
 
-POST /admin/upload-payslip
-GET /admin/upload-history
-GET /admin/upload-history/{upload-history_id}
+- POST /admin/upload-payslip
+- GET /admin/upload-history
+- GET /admin/upload-history/{upload-history_id}
 
 ## Excel Validation
 
