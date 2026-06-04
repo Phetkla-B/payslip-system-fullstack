@@ -43,42 +43,58 @@ onMounted(() => {
 
 
 <template>
-    <div class="container">
-        <h1>รายการเงินเดือน</h1>
+    <div class="page-container">
+        <h1 class="page-title">My Payslips</h1>
+        <p class="page-subtitle">
+            View your monthly payslips records.
+        </p>
 
-        <p v-if="isLoading">กำลังโหลดข้อมูล...</p>
+        <p v-if="isLoading" class="page-subtitle">
+            กำลังโหลดข้อมูล...
+        </p>
 
-        <p v-if="errorMessage" class="error">
+        <p v-if="errorMessage" class="alert-error">
             {{ errorMessage }}
         </p>
 
-        <table v-if="payslips.length > 0">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>เดือน</th>
-                    <th>ปี</th>
-                    <th>เงินเดือนสุทธิ</th>
-                    <th>ดูรายละเอียด</th>
-                </tr>
-            </thead>
+        <div
+            v-if="payslips.length > 0"
+            class="table-wrapper"
+        >
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Month</th>
+                        <th>Year</th>
+                        <th>Total Income</th>
+                        <th>Total Deduction</th>
+                        <th>Net Salary</th>
+                        <th>View Detail</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr v-for="payslip in payslips" :key="payslip.id">
-                    <td>{{ payslip.id }}</td>
-                    <td>{{ payslip.salary_month }}</td>
-                    <td>{{ payslip.salary_year }}</td>
-                    <td>{{ payslip.net_salary }}</td>
-                    <td>
-                        <button @click="goToDetail(payslip.id)">
-                            Detail
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                <tbody>
+                    <tr v-for="payslip in payslips" :key="payslip.id">
+                        <td>{{ payslip.id }}</td>
+                        <td>{{ payslip.salary_month }}</td>
+                        <td>{{ payslip.salary_year }}</td>
+                        <td>{{ payslip.total_income }}</td>
+                        <td>{{ payslip.total_deduction }}</td>
+                        <td>
+                            <strong>{{ payslip.net_salary }}</strong>
+                        </td>
+                        <td>
+                            <button @click="goToDetail(payslip.id)">
+                                Detail
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <p v-else-if="!isLoading">
+        <p v-else-if="!isLoading" class="card">
             ยังไม่มีข้อมูลเงินเดือน
         </p>
     </div>
@@ -86,35 +102,8 @@ onMounted(() => {
 
 
 <style scoped>
-.container {
-    max-width: 900px;
-    margin: 40px auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-
-th,
-td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background: #f3f4f6;
-}
-
-button {
-    padding: 6px 12px;
-    cursor: pointer;
-}
-
-.error {
-    color: red;
+.page-title,
+.page-subtitle {
+    text-align: center;
 }
 </style>

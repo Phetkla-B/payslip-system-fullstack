@@ -74,77 +74,111 @@ onMounted(() => {
 
 
 <template>
-    <div class="container">
-        <button @click="goBack">Back</button>
+    <div class="page-container">
+        <h1 class="page-title">Payslip Detail</h1>
+        <p class="page-subtitle">
+            View detail payslip information for selected month.
+        </p>
 
-        <button @click="downloadPdf">Download PDF</button>
+        <div class="action-bar">
+            <button class="btn btn-secondary" @click="goBack">
+                Back
+            </button>
 
-        <h1>Payslip Detail</h1>
+            <button class="btn btn-primary" @click="downloadPdf">
+                Download PDF
+            </button>
+        </div>
 
-        <p v-if="isLoading">กำลังโหลดข้อมูล...</p>
+        <p v-if="isLoading" class="page-subtitle">
+            กำลังโหลดข้อมูล...
+        </p>
 
-        <p v-if="errorMessage" class="error">
+        <p v-if="errorMessage" class="alert-error">
             {{ errorMessage }}
         </p>
 
-        <div v-if="payslip" class="card">
-            <h2>{{ payslip.salary_month }}/{{ payslip.salary_year }}</h2>
+        <div v-if="payslip" class="detail-grid">
+            <div class="card">
+                <h2>Employee Information</h2>
 
-            <p><strong>Employee Code:</strong> {{ payslip.employee_code }}</p>
-            <p><strong>Department:</strong> {{ payslip.department }}</p>
-            <p><strong>Position:</strong> {{ payslip.position }}</p>
+                <p><strong>Employee Code:</strong> {{ payslip.employee_code }}</p>
+                <p><strong>Citizen ID:</strong> {{ payslip.citizen_id }}</p>
+                <p><strong>Department:</strong> {{ payslip.department }}</p>
+                <p><strong>Position:</strong> {{ payslip.position }}</p>
+                <p><strong>Period:</strong> {{ payslip.salary_month }}/{{ payslip.salary_year }}</p>
+            </div>
 
-            <hr />
+            <div class="card">
+                <h2>Summary</h2>
+                
+                <p><strong>Total Income:</strong> {{ payslip.total_income }}</p>
+                <p><strong>Total Deduction:</strong> {{ payslip.total_deduction }}</p>
+                <p><strong>Net Salary:</strong> {{ payslip.net_salary }}</p>
+            </div>
+                
+            <div class="card">
+                <h2>Income</h2>
 
-            <h3>Income</h3>
-            <p>Base Salary: {{ payslip.base_salary }}</p>
-            <p>Paid Salary: {{ payslip.paid_salary }}</p>
-            <p>Allowance: {{ payslip.allowance }}</p>
-            <p>Overtime Pay: {{ payslip.overtime_pay }}</p>
-            <p>Bonus: {{ payslip.bonus }}</p>
-            <p>Other Income: {{ payslip.other_income }}</p>
-            <p>Adjust Amount: {{ payslip.adjust_amount }}</p>
-            <p>Special Amount: {{ payslip.special_amount }}</p>
+                <p>Base Salary: {{ payslip.base_salary }}</p>
+                <p>Paid Salary: {{ payslip.paid_salary }}</p>
+                <p>Allowance: {{ payslip.allowance }}</p>
+                <p>Overtime Pay: {{ payslip.overtime_pay }}</p>
+                <p>Bonus: {{ payslip.bonus }}</p>
+                <p>Other Income: {{ payslip.other_income }}</p>
+                <p>Adjust Amount: {{ payslip.adjust_amount }}</p>
+                <p>Special Amount: {{ payslip.special_amount }}</p>
+            </div>
 
-            <hr />
+            <div class="card">
+                <h2>Deduction</h2>
 
-            <h3>Deduction</h3>
-            <p>Expense Deduction: {{ payslip.expense_deduction }}</p>
-            <p>Social Security: {{ payslip.social_security }}</p>
-            <p>Provident Fund: {{ payslip.provident_fund }}</p>
-            <p>Tax: {{ payslip.tax }}</p>
-            <p>Other Deduction: {{ payslip.other_deduction }}</p>
-
-            <hr />
-
-            <h3>Summary</h3>
-            <p><strong>Total Income:</strong> {{ payslip.total_income }}</p>
-            <p><strong>Total Deduction:</strong> {{ payslip.total_deduction }}</p>
-            <p><strong>Net Salary:</strong> {{ payslip.net_salary }}</p>
+                <p>Expense Deduction: {{ payslip.expense_deduction }}</p>
+                <p>Social Security: {{ payslip.social_security }}</p>
+                <p>Provident Fund: {{ payslip.provident_fund }}</p>
+                <p>Tax: {{ payslip.tax }}</p>
+                <p>Other Deduction: {{ payslip.other_deduction }}</p>
+            </div>
         </div>
     </div>
 </template>
 
 
 <style scoped>
-.container {
-    max-width: 800px;
-    margin: 40px auto;
+.page-title,
+.page-subtitle {
+    text-align: center;
 }
 
-.card {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.action-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
-button {
-    margin-right: 8px;
+.action-bar .btn {
+    min-width: 140px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card h2 {
+    margin-top: 0;
     margin-bottom: 16px;
-    padding: 8px 12px;
 }
 
-.error {
-    color: red;
+.card p {
+    margin: 8px 0;
+}
+
+@media (max-width: 768px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>

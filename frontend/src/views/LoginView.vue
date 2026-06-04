@@ -68,14 +68,18 @@ async function handleLogin() {
 
 <template>
     <div class="login-page">
-        <div class="login-card">
-            <h1>Self-Service Payslip</h1>
-            <p>เข้าสู่ระบบเพื่อดูข้อมูลเงินเดือน</p>
+        <div class="card login-card">
+            <h1 class="login-title">Self-Service Payslip</h1>
+            <p class="login-subtitle">
+                เข้าสู่ระบบเพื่อดูข้อมูลเงินเดือน
+            </p>
 
             <form @submit.prevent="handleLogin">
                 <div class="form-group">
-                    <label>เลขบัตรประชาชน</label>
+                    <label class="form-label">เลขบัตรประชาชน</label>
+
                     <input
+                        class="form-control"
                         v-model="citizenId"
                         type="text"
                         placeholder="กรอกเลขบัตรประชาชน 13 หลัก"
@@ -83,19 +87,24 @@ async function handleLogin() {
                 </div>
 
                 <div class="form-group">
-                    <label>รหัสผ่าน</label>
+                    <label class="form-label">รหัสผ่าน</label>
+
                     <input
+                        class="form-control"
                         v-model="password"
                         type="password"
                         placeholder="กรอกรหัสผ่าน"
                     />
                 </div>
 
-                <p v-if="errorMessage" class="error-message">
+                <p v-if="errorMessage" class="alert-error">
                     {{ errorMessage }}
                 </p>
 
-                <button type="submit" :disabled="isLoading">
+                <button 
+                    class="btn btn-primary login-button"
+                    type="submit" :disabled="isLoading"
+                >
                     {{ isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ" }}
                 </button>
             </form>
@@ -110,63 +119,28 @@ async function handleLogin() {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f4f6f8;
+    padding: 24px;
 }
 
 .login-card {
     width: 360px;
-    padding: 32px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-width: 380;
 }
 
-h1 {
-    margin-bottom: 8px;
-    font-size: 24px;
-    color: #333;
+.login-title {
+    margin: 0 0 8px;
+    font-size: 26px;
+    text-align: center;
 }
 
-p {
+.login-subtitle {
     margin-bottom: 24px;
-    color: #666;
+    color: #6b7280;
+    text-align: center;
 }
 
-.form-group {
-    margin-bottom: 16px;
-}
-
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #555;
-}
-
-input {
+.login-button {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #d0d5dd;
-    border-radius: 8px;
-    font-size: 14px;
+    margin-top: 8px;
 }
-
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #2563eb;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.error-message {
-    margin-bottom: 14px;
-    color: #dc2626;
-    font-weight: 600;
-}
-
 </style>

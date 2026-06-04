@@ -27,7 +27,7 @@ function logout() {
   <dev>
     <nav v-if="!isLoginPage" class="navbar">
       <div class="nav-left">
-        <strong>Payslip System</strong>
+        <strong class="brand">Payslip System</strong>
 
         <router-link v-if="userRole === 'admin'" to="/admin/upload">
           Upload
@@ -48,8 +48,8 @@ function logout() {
           {{ userName }} ({{ userRole }})
         </span>
 
-        <button @click="logout">
-        Logout
+        <button class="btn btn-secondary logout-button" @click="logout">
+          Logout
         </button>
 
       </div>
@@ -65,51 +65,59 @@ function logout() {
   display: flex;
   justify-content: space-between;
   align-item: center;
-  padding: 16px 32px;
-  background: #1f2937;
+  padding: 14px 32px;
+  background: #111827;
   color: white;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
 }
 
-.nav-left {
+.nav-left,
+.nav-right {
   display: flex;
   align-item: center;
   gap: 20px;
 }
 
-.nav-right {
-  display: flex;
-  align-item: center;
-  gap: 16px;
+.brand {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+a {
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+a.router-link-active {
+  color: #2563eb;
+  background: white;
 }
 
 .user-info {
   font-size: 14px;
-  color: #e5e7eb;
+  color: #d1d5db;
 }
 
-.navbar a {
-  padding: 6px 10px;
-  border-radius: 6px;
+.logout-button {
+  background: white;
+  color: #111827;
 }
 
-.navbar a:hover {
-  background: #374151;
-}
+@media (max-width: 768px) {
+  .navbar a:hover {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 
-a {
-  color: white;
-  text-decoration: none;
-}
+  .nav-left.
+  .nav-right {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-a.router-link-active {
-  background: #2563eb;
-  text-decoration: none;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
 </style>
