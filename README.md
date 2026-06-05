@@ -96,9 +96,39 @@ The system will reject file with missing required columns.
 ```bash
 cd backend
 
+# Setup Project
+
+## Create Virtual Environment
+
+python -m venv venv
+
+## Activate Virtual Environment
+
+Windows:
+venv\Scripts\activate
+
+Mac/Linux:
+source venv/bin/activate
+
+## Install Dependencies
+
 pip install -r requirements.txt
 
+## 5. Create .env File
+
+Copy `.env.example` and create New `.env` in folder /backend/
+
+## 6. Create Database
+
+CREATE DATABASE payslip_db;
+
+## 7. Run Application
+
 uvicorn app.main:app --reload
+
+## 8. Open Swagger
+
+http://127.0.0.1:8000/docs
 ```
 
 ## Run Frontend
@@ -118,7 +148,21 @@ User accounts are created by administrators or directly in the system database.
 Employees can log in using their Citizen ID and password.
 
 ## Sample-data
-- In folder sample-data > Test_Payslip.xlsx
+- In folder sample-data
+- sample_payslip.xlsx
+- invalid_missing_idcard.xlsx
+- invalid_missing_salary.xlsx
+- Non-Excel_File.txt
+
+## Testing Scenarios
+| Test Case              | Expected Result  | How to test                                  |
+| ---------------------- | ---------------- | -------------------------------------------- | 
+| Valid Excel File       | Upload Success   | Upload file : sample_payslip.xlsx            |
+| Missing ID Card Column | Validation Error | Upload file : invalid_missing_idcard.xlsx.   |
+| Missing Salary Column  | Validation Error | Upload file : invalid_missing_salary.xlsx    |
+| Duplicate Payslip      | Record Skipped   | Upload files that have already been uploaded |
+| Non-Excel File         | Upload Rejected  | Upload file : Non-Excel_File.txt             |
+| Unauthorized User      | 401 Unauthorized | Login by Citizen_id is not in database       |
 
 ## Screenshots
 
