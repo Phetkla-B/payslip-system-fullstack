@@ -111,6 +111,12 @@ npm install
 npm run dev
 ```
 
+## User Management
+
+User accounts are created by administrators or directly in the system database.
+
+Employees can log in using their Citizen ID and password.
+
 ## Sample-data
 - In folder sample-data > Test_Payslip.xlsx
 
